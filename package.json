@@ -1,0 +1,25 @@
+{
+  "name": "shahabuddinirfan.com",
+  "version": "1.0.0",
+  "description": "This repository contains code for my portfoliowebsite",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahab0105/shahabuddinirfan.com.git"
+  },
+  "keywords": [
+    "portfolio",
+    "softwaredevelopment",
+    "service",
+    "softwareEngineer"
+  ],
+  "author": "shahab uddin irfan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shahab0105/shahabuddinirfan.com/issues"
+  },
+  "homepage": "https://github.com/shahab0105/shahabuddinirfan.com#readme"
+}
