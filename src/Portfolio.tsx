@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
-const sections = {
+const sections: Record<string, string> = {
   "Hi": `# 👋 Hi, I'm Shahab Uddin Irfan
 
 🚀 **Full-Stack Engineer | AI Chatbot Integrator | Remote SaaS Specialist**
@@ -43,7 +43,7 @@ I'm a MERN-focused Full-Stack Developer with 8+ years of experience building sca
 };
 
 export default function Portfolio() {
-  const [active, setActive] = useState("Hi");
+  const [active, setActive] = useState<string>("Hi");
 
   return (
     <div className="flex h-screen w-full bg-zinc-900 text-white">
@@ -69,3 +69,4 @@ export default function Portfolio() {
     </div>
   );
 }
+
