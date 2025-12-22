@@ -3,7 +3,7 @@ node_modules/
 
 # Production build
 dist/
-
+studio-shahabudidnirfan.com/
 # Development
 .DS_Store
 *.log

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import { sanityClient } from "./sanity/client";
+
 
 const sections: Record<string, string> = {
   "Hi": `# 👋 Hi, I'm Shahab Uddin Irfan
@@ -42,8 +44,40 @@ I'm a MERN-focused Full-Stack Developer with 8+ years of experience building sca
 `
 };
 
+const FEATUREDWORK_QUERY = `*[
+  _type == "featuredWork"
+
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt, tags, description, url}`;
+
+// const FEATUREDWORK_QUERY = `*[_type == "featuredWork"]{ _id, title, description, tags }`
+interface FeaturedWork {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  publishedAt: string;
+  tags?: string[];
+  description?: string;
+  url?: string;
+}
+
 export default function Portfolio() {
   const [active, setActive] = useState<string>("Hi");
+  const [posts, setPosts] = useState<FeaturedWork[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const fetchedPosts = await sanityClient.fetch<FeaturedWork[]>(FEATUREDWORK_QUERY, {});
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []);
 
   return (
     <div className="flex h-screen w-full bg-zinc-900 text-white">
@@ -65,6 +99,33 @@ export default function Portfolio() {
       {/* Main content */}
       <div className="flex-1 p-10 overflow-y-auto prose prose-invert max-w-3xl">
         <ReactMarkdown>{sections[active]}</ReactMarkdown>
+        
+        {active === "Projects" && (
+          <div className="mt-8">
+            <h2 className="text-4xl font-bold mb-8">Featured Work</h2>
+            {loading ? (
+              <p>Loading posts...</p>
+            ) : posts.length > 0 ? (
+              <ul className="flex flex-col gap-y-4">
+                {posts.map((post) => (
+                  <li className="hover:underline" key={post._id}>
+                    <h3 className="text-xl font-semibold">{post.title}</h3>
+                    {post.publishedAt && (
+                      <p className="text-sm text-gray-400">
+                        {new Date(post.publishedAt).toLocaleDateString()}
+                      </p>
+                    )}
+                    {post.description && (
+                      <p className="text-gray-300 mt-2">{post.description}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No posts found.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
