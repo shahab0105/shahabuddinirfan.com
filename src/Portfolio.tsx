@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { sanityClient } from "./sanity/client";
-import { FEATUREDWORK_QUERY } from "./sanity/queries";
-import { FeaturedWork } from "./sanity/interfaces";
+import { FEATUREDWORK_QUERY, FETCH_SERVICES_QUERY } from "./sanity/queries";
+import { FeaturedWork, Service } from "./sanity/interfaces";
 import FeatureWorkCard from "./components/FeaturedWorkCard";
 
 
@@ -52,6 +52,7 @@ I'm a MERN-focused Full-Stack Developer with 8+ years of experience building sca
 export default function Portfolio() {
   const [active, setActive] = useState<string>("Hi");
   const [posts, setPosts] = useState<FeaturedWork[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -66,6 +67,22 @@ export default function Portfolio() {
       }
     }
     fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    try{
+      setLoading(true);
+      const fetchServices = async () => {
+        const fetchedServices = await sanityClient.fetch<Service[]>(FETCH_SERVICES_QUERY, {});
+        setServices(fetchedServices);
+      }
+      fetchServices();  
+    }
+    catch(error){
+      console.error("Error fetching services:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   return (
@@ -99,8 +116,20 @@ export default function Portfolio() {
                 {posts.map((post) => (
                   <li className="hover:underline" key={post._id}>
                     <FeatureWorkCard {...post} />
+                    
                   </li>
                 ))}
+                  <h2 className="text-4xl font-bold mb-8">Services Offered</h2>
+                {
+                  services.map((service) => (
+                    <li className="hover:underline" key={service._id}>
+                      <div className="title">{service.name}</div>
+                      <div className="description">{service.description}</div>
+                      <div className="timeline">{service.timeline}</div>
+                      <div className="pricing">{service.pricing}</div>
+                    </li>
+                  ))
+                }
               </ul>
             ) : (
               <p>No posts found.</p>

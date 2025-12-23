@@ -7,4 +7,11 @@ interface FeaturedWork {
   description?: string;
   url?: string;
 }
-export type { FeaturedWork }
+interface Service {
+  _id: string;
+  name: string;
+  description?: string;
+  timeline?: string;
+  pricing?: string;
+}
+export type { FeaturedWork, Service }
