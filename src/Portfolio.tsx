@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { sanityClient } from "./sanity/client";
+import { FEATUREDWORK_QUERY } from "./sanity/queries";
+import { FeaturedWork } from "./sanity/interfaces";
+import FeatureWorkCard from "./components/FeaturedWorkCard";
 
 
 const sections: Record<string, string> = {
@@ -44,21 +47,7 @@ I'm a MERN-focused Full-Stack Developer with 8+ years of experience building sca
 `
 };
 
-const FEATUREDWORK_QUERY = `*[
-  _type == "featuredWork"
-
-]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt, tags, description, url}`;
-
 // const FEATUREDWORK_QUERY = `*[_type == "featuredWork"]{ _id, title, description, tags }`
-interface FeaturedWork {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  publishedAt: string;
-  tags?: string[];
-  description?: string;
-  url?: string;
-}
 
 export default function Portfolio() {
   const [active, setActive] = useState<string>("Hi");
@@ -109,15 +98,7 @@ export default function Portfolio() {
               <ul className="flex flex-col gap-y-4">
                 {posts.map((post) => (
                   <li className="hover:underline" key={post._id}>
-                    <h3 className="text-xl font-semibold">{post.title}</h3>
-                    {post.publishedAt && (
-                      <p className="text-sm text-gray-400">
-                        {new Date(post.publishedAt).toLocaleDateString()}
-                      </p>
-                    )}
-                    {post.description && (
-                      <p className="text-gray-300 mt-2">{post.description}</p>
-                    )}
+                    <FeatureWorkCard {...post} />
                   </li>
                 ))}
               </ul>
