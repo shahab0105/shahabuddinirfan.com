@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0f1419;
+  --bg-elevated: #1a1f26;
+  --bg-muted: #252b33;
+  --text: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --accent: #22c55e;
+  --accent-orange: #f97316;
+}
+
+html.light {
+  --bg: #fafafa;
+  --bg-elevated: #f4f4f5;
+  --bg-muted: #e4e4e7;
+  --text: #18181b;
+  --text-muted: #71717a;
+}
+
+body {
+  @apply bg-[var(--bg)] text-[var(--text)] antialiased;
+}
